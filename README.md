@@ -1,3 +1,5 @@
+[![Deploy on Railway](https://railway.com/button.svg)](https://railway.com/new/template/gpt-load?utm_medium=integration&utm_source=button&utm_campaign=gpt-load)
+
 # GPT-Load on Railway
 
 A one-service [Railway](https://railway.com) template for [GPT-Load](https://www.gpt-load.com/v1), the self-hosted AI API proxy by [tbphp](https://github.com/tbphp/gpt-load). It keeps pools of upstream API keys for OpenAI, Gemini and Anthropic-format services, rotates and load-balances them, blacklists failing keys, and logs every request.
