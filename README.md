@@ -10,6 +10,7 @@ A one-service [Railway](https://railway.com) template for [GPT-Load](https://www
 
 - Public HTTPS domain on port 3001, health check `GET /health`, restart on failure.
 - GPT-Load keeps its SQLite database (`/app/data/gpt-load.db`) on the volume, so groups, keys, settings and request logs survive redeploys and updates.
+- `railway-start.sh` starts GPT-Load and, once, replaces the first-boot App URL (`http://localhost:3001`) with `APP_URL`. If you change App URL under **Settings** later, it's left alone.
 - Without `REDIS_DSN` it uses its in-memory cache, which is fine for a single instance.
 - This is the stable 1.x line. GPT-Load 2.0 is still a release candidate; the template moves to it once 2.0 is stable.
 
@@ -19,6 +20,7 @@ A one-service [Railway](https://railway.com) template for [GPT-Load](https://www
 |---|---|---|
 | `AUTH_KEY` | generated, 40 characters | The admin key: you log in to the web UI with it, and it's the first global proxy key |
 | `ENCRYPTION_KEY` | generated, 64 characters | Encrypts the upstream API keys stored in the database. Keep it: if it's lost, the stored keys can't be decrypted |
+| `APP_URL` | `https://${{RAILWAY_PUBLIC_DOMAIN}}` | Public URL. On first boot the start script saves it as GPT-Load's **App URL** setting, which the UI uses to show each group's proxy endpoint |
 | `PORT` | `3001` | Port GPT-Load listens on; the Railway domain targets it |
 
 There's no default password. Find `AUTH_KEY` in the service's **Variables** tab after the deploy and use it to log in.
@@ -39,7 +41,7 @@ The service builds from this repo's `main` branch. When a new GPT-Load release i
 
 ```sh
 docker build -t gpt-load-railway .
-docker run -p 3001:3001 -e AUTH_KEY=change-me-to-a-long-random-string -e ENCRYPTION_KEY=another-long-random-string -v gpt-load-data:/app/data gpt-load-railway
+docker run -p 3001:3001 -e APP_URL=http://localhost:3001 -e AUTH_KEY=change-me-to-a-long-random-string -e ENCRYPTION_KEY=another-long-random-string -v gpt-load-data:/app/data gpt-load-railway
 ```
 
 GPT-Load is MIT licensed by its authors. This repo only packages it for Railway.
